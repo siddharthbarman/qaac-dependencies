@@ -11,7 +11,13 @@ param(
 
 if (-not (Test-Path $directory)) 
 {
-    Write-Host "The specified directory does not exist or you do not have permission to read it."
+    Write-Error "The specified directory does not exist or you do not have permission to read it."
+    exit 1
+}
+
+if (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) 
+{
+    Write-Warning "Insufficient permissions to access WindowsApps folder. Run the console as an administrator and try again."
     exit 1
 }
 
